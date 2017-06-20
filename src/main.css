@@ -1,0 +1,16 @@
+#app {
+  height: 100%;
+}
+
+#app .grid {
+  height: 100%;
+}
+
+.connect-view {
+  max-width: 450px;
+}
+
+.ui.canvas.container {
+  margin-top: 7em;
+  margin-bottom: 4em;
+}

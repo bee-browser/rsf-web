@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>rsf-web</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/main.css">
+  </head>
+  <body>
+    <div id="app">
+      <connect-view v-if="!channel"></connect-view>
+      <surface-view v-if="channel"></surface-view>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script
+      src="https://unpkg.com/vue"></script>
+    <script
+      src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    <script id="connect-view-template" type="text/x-template">
+      <div class="ui middle aligned centered grid">
+        <div class="connect-view column">
+          <form class="ui large form"
+                v-on:submit.prevent="connect">
+            <div class="field">
+              <div class="ui input">
+                <input type="text" placeholder="Remote Surface Name" required
+                       v-model="name">
+              </div>
+            </div>
+            <button class="ui fluid blue large submit button">
+              Connect
+            </button>
+          </form>
+        </div>
+      </div>
+    </script>
+    <script id="surface-view-template" type="text/x-template">
+      <div>
+        <div class="ui fixed inverted menu">
+          <div class="ui container">
+            <div class="header item">
+              Surface: {{ name }} {{ width }}x{{ height }}
+            </div>
+          </div>
+        </div>
+        <div class="ui canvas container">
+          <div class="ui segment">
+            <canvas v-bind:width="width" v-bind:height="height"></canvas>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script src="/main.js"></script>
+  </body>
+</html>
