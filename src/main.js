@@ -14,8 +14,8 @@ const pusher = new Pusher('12f8df9a36b24c35570c', {
 let surface = {
   name: null,
   channel: null,
-  width: 0,
-  height: 0
+  width: 1000,
+  height: 200
 };
 
 // components
@@ -50,9 +50,14 @@ const SurfaceView = {
     receivePaintMessage: _.partial(function(ctx, data) {
       ctx.pendingMessages[data.seqNo] = data.message;
       while (ctx.seqNo in ctx.pendingMessages) {
-        this.processMessage(ctx.pendingMessages[ctx.seqNo]);
+        const msg = ctx.pendingMessages[ctx.seqNo];
         delete ctx.pendingMessages[ctx.seqNo];
-        ctx.seqNo++;
+        this.paint(msg);
+        if (msg.type === 'end_paint') {
+          ctx.seqNo = 0;
+        } else {
+          ctx.seqNo++;
+        }
       }
     }, {
       // Pusher seems not to keep the order of messages.  For keeping it, the
@@ -60,13 +65,16 @@ const SurfaceView = {
       // message.
       seqNo: 0, pendingMessages: {}
     }),
-    processMessage(msg) {
+    paint(msg) {
       switch (msg.type) {
-      case 'set_size':
+      case 'start_paint':
         this.setSize(msg.width, msg.height);
         break;
       case 'fill_rect':
         this.fillRect(msg.rect, msg.color);
+        break;
+      case 'end_paint':
+        this.flush();
         break;
       }
     },
@@ -78,6 +86,8 @@ const SurfaceView = {
       const ctx = $('canvas').get(0).getContext('2d');
       ctx.fillStyle = color;
       ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+    },
+    flush() {
     }
   }
 };

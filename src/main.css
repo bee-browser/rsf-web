@@ -1,3 +1,8 @@
+/*
+ * This file is distributed under the MIT license.
+ * See LICENSE file in the project root for details.
+ */
+
 #app {
   height: 100%;
 }
@@ -10,7 +15,11 @@
   max-width: 450px;
 }
 
-.ui.canvas.container {
-  margin-top: 7em;
-  margin-bottom: 4em;
+.canvas.column {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+canvas.ui.segment {
+  padding: 0;
 }

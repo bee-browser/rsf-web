@@ -1,3 +1,7 @@
+<!--
+    This file is distributed under the MIT license.
+    See LICENSE file in the project root for details.
+  -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -55,9 +59,10 @@
             </div>
           </div>
         </div>
-        <div class="ui canvas container">
-          <div class="ui segment">
-            <canvas v-bind:width="width" v-bind:height="height"></canvas>
+        <div class="ui one column centered grid">
+          <div class="center aligned canvas column">
+            <canvas class="ui segment"
+                    v-bind:width="width" v-bind:height="height"></canvas>
           </div>
         </div>
       </div>
