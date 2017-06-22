@@ -47,20 +47,22 @@
               Connect
             </button>
           </form>
+          <div class="ui center aligned vertical footer segment">
+            <a href="https://github.com/bee-browser/rsf-web"
+               title="GitHub: bee-browser/rsf-web">
+              <i class="github black big icon"></i>
+            </a>
+          </div>
         </div>
       </div>
     </script>
     <script id="surface-view-template" type="text/x-template">
-      <div>
-        <div class="ui fixed inverted menu">
-          <div class="ui container">
-            <div class="header item">
-              Surface: {{ name }} {{ width }}x{{ height }}
-            </div>
-          </div>
-        </div>
-        <div class="ui one column centered grid">
-          <div class="center aligned canvas column">
+      <div class="ui grid">
+        <div class="center aligned canvas column">
+          <div class="ui compact segments">
+            <h5 class="ui left aligned inverted blue header segment">
+              Surface({{ name }}) {{ width }}x{{ height }}
+            </h5>
             <canvas class="ui segment"
                     v-bind:width="width" v-bind:height="height"></canvas>
           </div>
