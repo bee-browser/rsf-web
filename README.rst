@@ -24,6 +24,7 @@ Dependencies
 * `jQuery`_ (MIT)
 * `Semantic UI`_ (MIT)
 * `Vue.js`_ (MIT)
+* `pusher-js`_ (MIT)
 
 
 License
@@ -39,4 +40,5 @@ details.
 .. _jQuery: https://jquery.com/
 .. _Semantic UI: https://semantic-ui.com/
 .. _Vue.js: https://vuejs.org/
+.. _pusher-js: https://github.com/pusher/pusher-js
 .. _LICENSE: ./LICENSE
