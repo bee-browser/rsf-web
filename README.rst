@@ -7,6 +7,9 @@ rsf-web is a web-based remote surface on which a layout result is painted.
 rsf-web receives paint messages through a specified `Pusher`_ channel, and
 paints a layout result on a HTML CANVAS element.
 
+Files in the ``src`` folder are automatically deployed onto
+https://bee-rsf-web.netlify.com/ after every commit.
+
 
 Development
 ===========
