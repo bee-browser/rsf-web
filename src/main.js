@@ -15,7 +15,8 @@ let surface = {
   name: null,
   channel: null,
   width: 1000,
-  height: 200
+  height: 200,
+  paintBoxes: []
 };
 
 // components
@@ -27,7 +28,7 @@ const ConnectView = {
     connect() {
       const channel = pusher.subscribe(surface.name);
       channel.bind('pusher:subscription_succeeded', () => {
-        surface.channel = channel;
+        this.channel = channel;
       });
       channel.bind('pusher:subscription_error', (status) => {
         console.error("pusher:subscription_error: %d", status);
@@ -68,24 +69,52 @@ const SurfaceView = {
     paint(msg) {
       switch (msg.type) {
       case 'start_paint':
-        this.setSize(msg.width, msg.height);
+        this.startPaint(msg.width, msg.height);
         break;
       case 'fill_rect':
         this.fillRect(msg.rect, msg.color);
+        break;
+      case 'draw_border':
+        this.drawBorder(msg.rect, msg.border);
         break;
       case 'end_paint':
         this.flush();
         break;
       }
     },
-    setSize(width, height) {
+    startPaint(width, height) {
+      this.paintBoxes.length = 0;
       this.width = width;
       this.height = height;
     },
     fillRect(rect, color) {
-      const ctx = $('canvas').get(0).getContext('2d');
-      ctx.fillStyle = color;
-      ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+      this.paintBoxes.push({
+        style: {
+          position: 'absolute',
+          boxSizing: 'border-box',
+          top: `${rect.y}px`,
+          left: `${rect.x}px`,
+          width: `${rect.width}px`,
+          height: `${rect.height}px`,
+          backgroundColor: color
+        }
+      });
+    },
+    drawBorder(rect, border) {
+      let style = {
+        position: 'absolute',
+        boxSizing: 'border-box',
+        top: `${rect.y}px`,
+        left: `${rect.x}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`
+      };
+      ['top', 'right', 'bottom', 'left'].forEach((side) => {
+        style[`border-${side}-width`] = border[side].width + 'px';
+        style[`border-${side}-style`] = border[side].style;
+        style[`border-${side}-color`] = border[side].color;
+      });
+      this.paintBoxes.push({ style });
     },
     flush() {
     }

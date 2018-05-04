@@ -36,11 +36,11 @@
       <div class="ui middle aligned centered grid">
         <div class="connect-view column">
           <form class="ui large form"
-                v-on:submit.prevent="connect">
+            v-on:submit.prevent="connect">
             <div class="field">
               <div class="ui input">
                 <input type="text" placeholder="Remote Surface Name" required
-                       v-model="name">
+                  v-model="name">
               </div>
             </div>
             <button class="ui fluid blue large submit button">
@@ -49,7 +49,7 @@
           </form>
           <div class="ui center aligned vertical footer segment">
             <a href="https://github.com/bee-browser/rsf-web"
-               title="GitHub: bee-browser/rsf-web">
+              title="GitHub: bee-browser/rsf-web">
               <i class="github black big icon"></i>
             </a>
           </div>
@@ -58,13 +58,20 @@
     </script>
     <script id="surface-view-template" type="text/x-template">
       <div class="ui grid">
-        <div class="center aligned canvas column">
+        <div class="center aligned surface-view column">
           <div class="ui compact segments">
             <h5 class="ui left aligned inverted blue header segment">
               Surface({{ name }}) {{ width }}x{{ height }}
             </h5>
-            <canvas class="ui segment"
-                    v-bind:width="width" v-bind:height="height"></canvas>
+            <div class="surface-view ui segment"
+              v-bind:style="{ boxSizing: 'content-box', width: width + 'px',
+              height: height + 'px' }">
+              <div class="surface-view-canvas"
+                v-bind:style="{ clip: `rect(0px,${width}px,${height}px,0px)` }">
+                <div v-for="paintBox in paintBoxes"
+                  v-bind:style="paintBox.style"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

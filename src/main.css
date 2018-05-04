@@ -15,11 +15,20 @@
   max-width: 450px;
 }
 
-.canvas.column {
+.surface-view.column {
   margin-top: 1em;
   margin-bottom: 1em;
 }
 
-canvas.ui.segment {
+.surface-view.ui.segment {
   padding: 0;
+  position: relative;
+}
+
+.surface-view-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
