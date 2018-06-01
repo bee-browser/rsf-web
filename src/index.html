@@ -63,11 +63,9 @@
             <h5 class="ui left aligned inverted blue header segment">
               Surface({{ name }}) {{ width }}x{{ height }}
             </h5>
-            <div class="surface-view ui segment"
-              v-bind:style="{ boxSizing: 'content-box', width: width + 'px',
-              height: height + 'px' }">
+            <div class="surface-view ui segment">
               <div class="surface-view-canvas"
-                v-bind:style="{ clip: `rect(0px,${width}px,${height}px,0px)` }">
+                v-bind:style="{ width: width + 'px', height: height + 'px' }">
                 <div v-for="paintBox in paintBoxes"
                   v-bind:style="paintBox.style"></div>
               </div>

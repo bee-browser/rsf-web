@@ -77,6 +77,12 @@ const SurfaceView = {
       case 'draw_border':
         this.drawBorder(msg.rect, msg.border);
         break;
+      case 'draw_widget':
+        this.drawWidget(msg.widget, msg.rect, msg.clip);
+        break;
+      case 'draw_tiles':
+        this.drawTiles(msg.widget, msg.rect, msg.clip);
+        break;
       case 'end_paint':
         this.flush();
         break;
@@ -116,6 +122,40 @@ const SurfaceView = {
       });
       this.paintBoxes.push({ style });
     },
+    drawWidget(widget, rect, clip) {
+      let style = {
+        position: 'absolute',
+        top: `${rect.y}px`,
+        left: `${rect.x}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`,
+        backgroundImage: `url(${widget})`,
+        backgroundSize: `${rect.width}px ${rect.height}px`,
+      }
+      if (clip) {
+        const top = clip.y - rect.y;
+        const left = clip.x - rect.x;
+        const bottom = top + clip.height;
+        const right = left + clip.width;
+        style.clip = `rect(${top}px, ${right}px, ${bottom}px, ${left}px)`;
+      }
+      this.paintBoxes.push({ style });
+    },
+    drawTiles(widget, rect, clip) {
+      let style = {
+        position: 'absolute',
+        top: `${clip.y}px`,
+        left: `${clip.x}px`,
+        width: `${clip.width}px`,
+        height: `${clip.height}px`,
+        backgroundImage: `url('${widget}')`,
+        backgroundOrigin: 'border-box',
+        backgroundPosition: `${rect.x - clip.x}px ${rect.y - clip.y}px`,
+        backgroundSize: `${rect.width}px ${rect.height}px`,
+        backgroundRepeat: 'repeat',
+      }
+      this.paintBoxes.push({ style });
+    },
     flush() {
     }
   }
@@ -125,7 +165,7 @@ const SurfaceView = {
 
 const app = new Vue({
   el: '#app',
-  data() { return surface; },
+  data: () => surface,
   components: {
     'connect-view': ConnectView,
     'surface-view': SurfaceView
