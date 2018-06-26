@@ -11,13 +11,19 @@ const pusher = new Pusher('12f8df9a36b24c35570c', {
 
 // models
 
-let surface = {
+const surface = {
   name: null,
   channel: null,
   width: 1000,
   height: 200,
   paintBoxes: []
 };
+
+// Pusher seems not to keep the order of messages.  For keeping it, the
+// sequence number in data from Pusher is checked before processing the
+// message.
+let seqNo = 0;
+let pendingMessages = {};
 
 // components
 
@@ -48,25 +54,16 @@ const SurfaceView = {
       pusher.unsubscribe(this.name);
       this.channel = null;
     },
-    receivePaintMessage: _.partial(function(ctx, data) {
-      ctx.pendingMessages[data.seqNo] = data.message;
-      while (ctx.seqNo in ctx.pendingMessages) {
-        const msg = ctx.pendingMessages[ctx.seqNo];
-        delete ctx.pendingMessages[ctx.seqNo];
+    receivePaintMessage(data) {
+      pendingMessages[data.seqNo] = data.message;
+      while (seqNo in pendingMessages) {
+        const msg = pendingMessages[seqNo];
+        delete pendingMessages[seqNo];
         this.paint(msg);
-        if (msg.type === 'end_paint') {
-          ctx.seqNo = 0;
-        } else {
-          ctx.seqNo++;
-        }
       }
-    }, {
-      // Pusher seems not to keep the order of messages.  For keeping it, the
-      // sequence number in data from Pusher is checked before processing the
-      // message.
-      seqNo: 0, pendingMessages: {}
-    }),
+    },
     paint(msg) {
+      seqNo++;
       switch (msg.type) {
       case 'start_paint':
         this.startPaint(msg.width, msg.height);
@@ -84,7 +81,7 @@ const SurfaceView = {
         this.drawTiles(msg.widget, msg.rect, msg.clip);
         break;
       case 'end_paint':
-        this.flush();
+        this.endPaint();
         break;
       }
     },
@@ -156,7 +153,9 @@ const SurfaceView = {
       }
       this.paintBoxes.push({ style });
     },
-    flush() {
+    endPaint() {
+      seqNo = 0;
+      pendingMessages = {};
     }
   }
 };
