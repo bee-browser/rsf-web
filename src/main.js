@@ -65,32 +65,32 @@ const SurfaceView = {
     paint(msg) {
       seqNo++;
       switch (msg.type) {
-      case 'start_paint':
-        this.startPaint(msg.width, msg.height);
+      case 'layout.painter.start':
+        this.startPaint(msg.data);
         break;
-      case 'fill_rect':
-        this.fillRect(msg.rect, msg.color);
+      case 'layout.painter.fill_rect':
+        this.fillRect(msg.data);
         break;
-      case 'draw_border':
-        this.drawBorder(msg.rect, msg.border);
+      case 'layout.painter.draw_border':
+        this.drawBorder(msg.data);
         break;
-      case 'draw_widget':
-        this.drawWidget(msg.widget, msg.rect, msg.clip);
+      case 'layout.painter.draw_widget':
+        this.drawWidget(msg.data);
         break;
-      case 'draw_tiles':
-        this.drawTiles(msg.widget, msg.rect, msg.clip);
+      case 'layout.painter.draw_tiles':
+        this.drawTiles(msg.data);
         break;
-      case 'end_paint':
+      case 'layout.painter.end':
         this.endPaint();
         break;
       }
     },
-    startPaint(width, height) {
+    startPaint({width, height}) {
       this.paintBoxes.length = 0;
       this.width = width;
       this.height = height;
     },
-    fillRect(rect, color) {
+    fillRect({rect, color}) {
       this.paintBoxes.push({
         style: {
           position: 'absolute',
@@ -103,7 +103,7 @@ const SurfaceView = {
         }
       });
     },
-    drawBorder(rect, border) {
+    drawBorder({rect, border}) {
       let style = {
         position: 'absolute',
         boxSizing: 'border-box',
@@ -119,7 +119,7 @@ const SurfaceView = {
       });
       this.paintBoxes.push({ style });
     },
-    drawWidget(widget, rect, clip) {
+    drawWidget({widget, rect, clip}) {
       let style = {
         position: 'absolute',
         top: `${rect.y}px`,
@@ -138,7 +138,7 @@ const SurfaceView = {
       }
       this.paintBoxes.push({ style });
     },
-    drawTiles(widget, rect, clip) {
+    drawTiles({widget, rect, clip}) {
       let style = {
         position: 'absolute',
         top: `${clip.y}px`,
