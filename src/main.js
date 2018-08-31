@@ -6,7 +6,7 @@
 
 const pusher = new Pusher('12f8df9a36b24c35570c', {
   cluster: 'ap1',
-  encrypted: true
+  forceTLS: true
 });
 
 // models
