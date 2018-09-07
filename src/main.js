@@ -11,8 +11,13 @@ const pusher = new Pusher('12f8df9a36b24c35570c', {
 
 // models
 
+let channelName = '';
+if (location.hash.length > 1) {
+  channelName = location.hash.slice(1);
+}
+
 const surface = {
-  name: null,
+  name: channelName,
   channel: null,
   width: 1000,
   height: 200,
