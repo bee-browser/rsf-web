@@ -30,6 +30,16 @@ const surface = {
 let seqNo = 0;
 let pendingMessages = {};
 
+function convertColor(color) {
+  if (color.a === 0) {
+    return "transparent";
+  }
+  if (color.a === undefined || color.a === 255) {
+    return `rgb(${color.r},${color.g},${color.b})`;
+  }
+  return `rgba(${color.r},${color.g},${color.b},${color.a/255.0})`
+}
+
 // components
 
 const ConnectView = {
@@ -104,7 +114,7 @@ const SurfaceView = {
           left: `${rect.x}px`,
           width: `${rect.width}px`,
           height: `${rect.height}px`,
-          backgroundColor: color
+          backgroundColor: convertColor(color)
         }
       });
     },
@@ -120,7 +130,7 @@ const SurfaceView = {
       ['top', 'right', 'bottom', 'left'].forEach((side) => {
         style[`border-${side}-width`] = border[side].width + 'px';
         style[`border-${side}-style`] = border[side].style;
-        style[`border-${side}-color`] = border[side].color;
+        style[`border-${side}-color`] = converColor(border[side].color);
       });
       this.paintBoxes.push({ style });
     },
